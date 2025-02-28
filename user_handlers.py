@@ -13,7 +13,7 @@ import aiosqlite
 import numpy as np
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-DB_PATH = "movies.db"
+DB_PATH = "D:\kinobot\pythonProject\DB\movies.db"
 USER_PATH = "user.db"
 REC_PATH = "rec.db"
 
