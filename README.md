@@ -43,8 +43,17 @@ kinogo – это Telegram-бот, который помогает пользо�
 ## Установка и запуск
 
 1. **Клонируйте репозиторий:**
-
-   ```bash
-   git clone https://github.com/yourusername/backspace-bot.git
-   cd backspace-bot
+```bash
+   git clone https://github.com/yourusername/BackSpace.git
+   cd BackSpace
+```
+2. **Запустите парсер для работы с базой данных:**
+```bash
+  cd DATABASE
+  python parser.py
+```
+3. **Запустите основное приложение^**
+```bash
+  python main.py
+```
 
