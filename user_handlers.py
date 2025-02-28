@@ -143,11 +143,12 @@ async def show_user_movies(callback: types.CallbackQuery):
 
 @user_router.callback_query(F.data == "oc")
 async def cmd_o(callback: types.CallbackQuery):
+    user_id = callback.from_user.id
     async with aiosqlite.connect(USER_PATH) as db:
         query = """
                 SELECT title, rating, genre FROM user_movies 
                 WHERE mark != 0 AND user_id = ?
-                """  
+                """
         async with db.execute(query, (user_id,)) as cursor:
             movies = await cursor.fetchall()
 
