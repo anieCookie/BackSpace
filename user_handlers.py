@@ -109,13 +109,18 @@ async def cmd_o(callback: types.CallbackQuery):
 async def cmd_o(callback: types.CallbackQuery):
     await callback.message.answer("Вот, что я могу вам показать", reply_markup=st)
 
+import aiosqlite
+
 @user_router.callback_query(F.data == "pr")
-async def show_all_movies(callback: types.CallbackQuery):
+async def show_user_movies(callback: types.CallbackQuery):
+    user_id = callback.from_user.id  # Получаем ID пользователя
+
     async with aiosqlite.connect(USER_PATH) as db:
         query = """
-        SELECT title, rating, genre FROM user_movies
-        """
-        async with db.execute(query) as cursor:
+        SELECT title, rating, genre FROM user_movies 
+        WHERE user_id = ?
+        """  # Добавили фильтр по user_id
+        async with db.execute(query, (user_id,)) as cursor:
             movies = await cursor.fetchall()
 
     if movies:
@@ -124,8 +129,7 @@ async def show_all_movies(callback: types.CallbackQuery):
             for title, rating, genre in movies
         )
     else:
-        result = "В базе данных пока нет фильмов."
-
+        result = "В базе данных пока нет оценённых фильмов."
 
     keyboard = InlineKeyboardBuilder()
     keyboard.button(text="Вернуться обратно", callback_data="back52")
@@ -141,9 +145,10 @@ async def show_all_movies(callback: types.CallbackQuery):
 async def cmd_o(callback: types.CallbackQuery):
     async with aiosqlite.connect(USER_PATH) as db:
         query = """
-        SELECT title, mark, genre FROM user_movies WHERE mark != 0
-        """
-        async with db.execute(query) as cursor:
+                SELECT title, rating, genre FROM user_movies 
+                WHERE mark != 0 AND user_id = ?
+                """  
+        async with db.execute(query, (user_id,)) as cursor:
             movies = await cursor.fetchall()
 
     if movies:
